@@ -67,8 +67,17 @@ const HomePage = () => {
   const fetchProducts = async () => {
     try {
       const response = await api.get('/products');
+      console.log('API Response:', response.data);
+      
       // La API devuelve { products: [...], pagination: {...} }
-      const productsData = response.data.products || response.data;
+      let productsData = response.data.products || response.data;
+      
+      // Asegurar que siempre sea un array
+      if (!Array.isArray(productsData)) {
+        console.error('Products data is not an array:', productsData);
+        productsData = [];
+      }
+      
       setProducts(productsData);
     } catch (error: any) {
       console.error('Error cargando productos:', error);
