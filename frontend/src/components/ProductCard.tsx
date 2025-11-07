@@ -22,7 +22,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
-  const imageUrl = product.imagenes[0] || 'https://via.placeholder.com/300x300?text=Sin+Imagen';
+  const imageUrl = product.imagenes?.[0] || '/logo-ositoslua.png';
   const [isHovered, setIsHovered] = useState(false);
   const [inWishlist, setInWishlist] = useState(isInWishlist(product.id));
   
