@@ -112,6 +112,8 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
   process.env.FRONTEND_URL,
+  'https://ositolua.vercel.app', // Dominio sin "s" (typo en Vercel)
+  'https://ositoslua.vercel.app', // Dominio correcto
 ].filter(Boolean) as string[];
 
 app.use(cors({
