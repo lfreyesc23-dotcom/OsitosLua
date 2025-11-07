@@ -83,7 +83,8 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-purple-700 mt-8 pt-8 text-center text-purple-300">
-          <p>© 2024 OsitosLua. Todos los derechos reservados. 🧸💕</p>
+          <p>© 2025 OsitosLua. Todos los derechos reservados. 🧸💕</p>
+          <p className="text-sm mt-2">Desarrollado por <a href="https://claussproservice.com" target="_blank" rel="noopener noreferrer" className="text-pink-300 hover:text-pink-200 underline">claussproservice</a></p>
         </div>
       </div>
     </div>

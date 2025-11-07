@@ -14,14 +14,14 @@ const DiscountWheel = ({ onClose, onWin }: DiscountWheelProps) => {
 
   // Opciones de descuento: 5%, 10%, 15%, "Siga participando" (0%)
   const segments = [
-    { discount: 5, color: 'from-pink-400 to-pink-600', label: '5%' },
-    { discount: 0, color: 'from-gray-300 to-gray-500', label: '¡Sigue!' },
-    { discount: 10, color: 'from-purple-400 to-purple-600', label: '10%' },
-    { discount: 0, color: 'from-gray-300 to-gray-500', label: '¡Sigue!' },
-    { discount: 15, color: 'from-blue-400 to-blue-600', label: '15%' },
-    { discount: 0, color: 'from-gray-300 to-gray-500', label: '¡Sigue!' },
-    { discount: 10, color: 'from-purple-400 to-purple-600', label: '10%' },
-    { discount: 5, color: 'from-pink-400 to-pink-600', label: '5%' },
+    { discount: 5, color: 'from-pink-400 to-pink-600', label: '5% OFF', textColor: 'text-white' },
+    { discount: 0, color: 'from-gray-300 to-gray-500', label: '¡Sigue!', textColor: 'text-white' },
+    { discount: 10, color: 'from-purple-400 to-purple-600', label: '10% OFF', textColor: 'text-white' },
+    { discount: 0, color: 'from-gray-300 to-gray-500', label: '¡Sigue!', textColor: 'text-white' },
+    { discount: 15, color: 'from-blue-400 to-blue-600', label: '15% OFF', textColor: 'text-white' },
+    { discount: 0, color: 'from-gray-300 to-gray-500', label: '¡Sigue!', textColor: 'text-white' },
+    { discount: 10, color: 'from-purple-400 to-purple-600', label: '10% OFF', textColor: 'text-white' },
+    { discount: 5, color: 'from-pink-400 to-pink-600', label: '5% OFF', textColor: 'text-white' },
   ];
 
   const spinWheel = () => {
@@ -133,8 +133,11 @@ const DiscountWheel = ({ onClose, onWin }: DiscountWheelProps) => {
                   }}
                 >
                   <div 
-                    className="absolute top-8 left-1/2 text-white font-bold text-lg"
-                    style={{ transform: 'translateX(-50%)' }}
+                    className={`absolute top-12 left-1/2 ${segment.textColor} font-extrabold text-base drop-shadow-lg`}
+                    style={{ 
+                      transform: 'translateX(-50%)',
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+                    }}
                   >
                     {segment.label}
                   </div>
@@ -151,16 +154,26 @@ const DiscountWheel = ({ onClose, onWin }: DiscountWheelProps) => {
 
         {/* Resultado */}
         {result !== null && (
-          <div className={`text-center p-4 rounded-xl mb-4 ${
-            result > 0 ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+          <div className={`text-center p-6 rounded-xl mb-4 shadow-lg ${
+            result > 0 ? 'bg-gradient-to-r from-green-100 to-green-200 border-2 border-green-400' : 'bg-gradient-to-r from-gray-100 to-gray-200 border-2 border-gray-400'
           }`}>
             {result > 0 ? (
               <>
-                <p className="text-2xl font-bold">🎉 ¡Ganaste {result}% OFF!</p>
-                <p className="text-sm mt-1">Código: RULETA{result}</p>
+                <div className="text-4xl mb-2">🎉</div>
+                <p className="text-3xl font-bold text-green-800 mb-2">¡GANASTE!</p>
+                <p className="text-5xl font-extrabold text-green-600 mb-2">{result}% DESCUENTO</p>
+                <div className="bg-white rounded-lg p-3 mt-3 border-2 border-dashed border-green-500">
+                  <p className="text-xs text-gray-600 mb-1">Tu código de descuento:</p>
+                  <p className="text-2xl font-bold text-purple-600 tracking-wider">RULETA{result}</p>
+                  <p className="text-xs text-gray-500 mt-2">Válido por 7 días • Úsalo en el checkout</p>
+                </div>
               </>
             ) : (
-              <p className="text-lg font-bold">¡Sigue participando! 💪</p>
+              <>
+                <div className="text-3xl mb-2">😊</div>
+                <p className="text-xl font-bold text-gray-700">¡Sigue participando!</p>
+                <p className="text-sm text-gray-600 mt-1">Vuelve en tu próxima visita</p>
+              </>
             )}
           </div>
         )}
