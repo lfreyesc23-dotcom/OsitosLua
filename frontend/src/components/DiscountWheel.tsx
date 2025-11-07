@@ -133,6 +133,7 @@ const DiscountWheel = ({ onClose, onWin }: DiscountWheelProps) => {
           >
             {segments.map((segment, index) => {
               const angle = segmentAngle * index;
+              const labelRotation = angle + segmentAngle / 2;
               return (
                 <div
                   key={index}
@@ -143,18 +144,19 @@ const DiscountWheel = ({ onClose, onWin }: DiscountWheelProps) => {
                     transformOrigin: '50% 50%'
                   }}
                 >
-                  <div 
-                    className={`absolute ${segment.textColor} font-extrabold text-base drop-shadow-lg`}
-                    style={{ 
-                      top: '50%',
-                      left: '50%',
-                      transform: `translate(-50%, -120%) rotate(${-angle - segmentAngle / 2}deg)`,
-                      transformOrigin: 'center',
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                      whiteSpace: 'nowrap'
-                    }}
+                  <div
+                    className="absolute inset-0 flex items-center justify-center"
                   >
-                    {segment.label}
+                    <div
+                      className={`font-extrabold text-xs md:text-sm ${segment.textColor}`}
+                      style={{
+                        transform: `rotate(${labelRotation}deg) translate(0, -115%) rotate(${-labelRotation}deg)`,
+                        textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      {segment.label}
+                    </div>
                   </div>
                 </div>
               );
