@@ -1,7 +1,7 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { PrismaClient } from '@prisma/client';
-import { authenticateToken, requireAdmin } from '../middleware/auth';
+import { authenticateToken, requireAdmin, AuthRequest } from '../middleware/auth';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
 router.post('/validate', [
   body('codigo').trim().notEmpty().withMessage('El código del cupón es requerido'),
   body('total').isFloat({ min: 0 }).withMessage('El total debe ser un número válido')
-], async (req, res) => {
+], async (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -109,7 +109,7 @@ router.post('/', authenticateToken, requireAdmin, [
   body('minCompra').optional().isFloat({ min: 0 }),
   body('maxUsos').optional().isInt({ min: 1 }),
   body('fechaExpiracion').optional().isISO8601()
-], async (req, res) => {
+], async (req: AuthRequest, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -153,7 +153,7 @@ router.put('/:id', authenticateToken, requireAdmin, [
   body('maxUsos').optional().isInt({ min: 1 }),
   body('fechaExpiracion').optional().isISO8601(),
   body('activo').optional().isBoolean()
-], async (req, res) => {
+], async (req: AuthRequest, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });

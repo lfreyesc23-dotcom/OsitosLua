@@ -58,3 +58,7 @@ export const admin = (req: AuthRequest, res: Response, next: NextFunction) => {
     res.status(403).json({ message: 'Acceso denegado. Solo administradores' });
   }
 };
+
+// Aliases para compatibilidad
+export const authenticateToken = protect;
+export const requireAdmin = admin;

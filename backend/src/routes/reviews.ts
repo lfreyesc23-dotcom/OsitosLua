@@ -142,7 +142,7 @@ router.get('/my-reviews', protect, async (req: AuthRequest, res: Response) => {
           select: {
             id: true,
             nombre: true,
-            imagen: true,
+            imagenes: true,
           },
         },
       },
@@ -272,7 +272,7 @@ router.get('/admin/pending', protect, admin, async (req: AuthRequest, res: Respo
         product: {
           select: {
             nombre: true,
-            imagen: true,
+            imagenes: true,
           },
         },
       },
@@ -302,7 +302,7 @@ router.get('/admin/all', protect, admin, async (req: AuthRequest, res: Response)
         product: {
           select: {
             nombre: true,
-            imagen: true,
+            imagenes: true,
           },
         },
       },
