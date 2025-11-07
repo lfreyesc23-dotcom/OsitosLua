@@ -24,7 +24,7 @@ const DiscountWheel = ({ onClose, onWin }: DiscountWheelProps) => {
     { discount: 5, color: 'from-pink-400 to-pink-600', label: '5% OFF', textColor: 'text-white' },
   ];
 
-  const spinWheel = () => {
+  const spinWheel = async () => {
     if (isSpinning) return;
 
     setIsSpinning(true);
@@ -38,53 +38,62 @@ const DiscountWheel = ({ onClose, onWin }: DiscountWheelProps) => {
 
     // Calcular el segmento ganador
     setTimeout(async () => {
-      const normalizedRotation = totalRotation % 360;
-      const segmentAngle = 360 / segments.length;
-      const segmentIndex = Math.floor((360 - normalizedRotation) / segmentAngle) % segments.length;
-      const wonDiscount = segments[segmentIndex].discount;
-      
-      setResult(wonDiscount);
-      setIsSpinning(false);
+      try {
+        const normalizedRotation = totalRotation % 360;
+        const segmentAngle = 360 / segments.length;
+        const segmentIndex = Math.floor((360 - normalizedRotation) / segmentAngle) % segments.length;
+        const wonDiscount = segments[segmentIndex].discount;
+        
+        setResult(wonDiscount);
+        setIsSpinning(false);
 
-      // Guardar que ya usó la ruleta
-      localStorage.setItem('wheelUsed', 'true');
-      
-      if (wonDiscount > 0) {
-        // Crear cupón en el backend
-        try {
-          const { data } = await api.post('/coupons/create-wheel-discount', {
-            discount: wonDiscount
-          });
-          
-          // Guardar cupón en localStorage
-          localStorage.setItem('wheelDiscount', JSON.stringify({
-            code: data.coupon.codigo,
-            discount: wonDiscount,
-            expiresAt: data.coupon.expiresAt
-          }));
-          
-          showSuccess(`🎉 ¡Ganaste ${wonDiscount}% de descuento! Código: ${data.coupon.codigo}`);
-          onWin(wonDiscount);
-        } catch (error) {
-          console.error('Error creando cupón:', error);
-          // Fallback: guardar solo en localStorage si falla el backend
-          const couponCode = `RULETA${wonDiscount}`;
-          localStorage.setItem('wheelDiscount', JSON.stringify({
-            code: couponCode,
-            discount: wonDiscount,
-            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
-          }));
-          showSuccess(`🎉 ¡Ganaste ${wonDiscount}% de descuento! Código: ${couponCode}`);
-          onWin(wonDiscount);
+        // Guardar que ya usó la ruleta
+        localStorage.setItem('wheelUsed', 'true');
+        
+        if (wonDiscount > 0) {
+          // Crear cupón en el backend
+          try {
+            const { data } = await api.post('/coupons/create-wheel-discount', {
+              discount: wonDiscount
+            });
+            
+            // Guardar cupón en localStorage
+            localStorage.setItem('wheelDiscount', JSON.stringify({
+              code: data.coupon.codigo,
+              discount: wonDiscount,
+              expiresAt: data.coupon.expiresAt
+            }));
+            
+            showSuccess(`🎉 ¡Ganaste ${wonDiscount}% de descuento! Código: ${data.coupon.codigo}`);
+            onWin(wonDiscount);
+          } catch (error) {
+            console.error('Error creando cupón:', error);
+            // Fallback: guardar solo en localStorage si falla el backend
+            const couponCode = `RULETA${wonDiscount}`;
+            localStorage.setItem('wheelDiscount', JSON.stringify({
+              code: couponCode,
+              discount: wonDiscount,
+              expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+            }));
+            showSuccess(`🎉 ¡Ganaste ${wonDiscount}% de descuento! Código: ${couponCode}`);
+            onWin(wonDiscount);
+          }
+        } else {
+          showError('¡Sigue participando! Intenta de nuevo en tu próxima visita');
         }
-      } else {
-        showError('¡Sigue participando! Intenta de nuevo en tu próxima visita');
-      }
 
-      // Cerrar después de 3 segundos
-      setTimeout(() => {
-        onClose();
-      }, 3000);
+        // Cerrar después de 3 segundos
+        setTimeout(() => {
+          onClose();
+        }, 3000);
+      } catch (error) {
+        console.error('Error en la ruleta:', error);
+        setIsSpinning(false);
+        showError('Hubo un error con la ruleta. Por favor, intenta más tarde.');
+        setTimeout(() => {
+          onClose();
+        }, 2000);
+      }
     }, 4000); // Duración de la animación
   };
 

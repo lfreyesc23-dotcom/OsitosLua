@@ -52,23 +52,30 @@ const HomePage = () => {
 
   // Verificar si es primera visita y mostrar ruleta
   useEffect(() => {
-    const hasUsedWheel = localStorage.getItem('wheelUsed');
-    if (!hasUsedWheel) {
-      // Mostrar ruleta después de 2 segundos
-      const timer = setTimeout(() => {
-        setShowWheel(true);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
+    // DESHABILITADO TEMPORALMENTE - La ruleta automática puede causar problemas
+    // Solo se mostrará si el usuario hace clic en el botón
+    // const hasUsedWheel = localStorage.getItem('wheelUsed');
+    // if (!hasUsedWheel) {
+    //   // Mostrar ruleta después de 2 segundos
+    //   const timer = setTimeout(() => {
+    //     setShowWheel(true);
+    //   }, 2000);
+    //   return () => clearTimeout(timer);
+    // }
   }, []);
 
   const fetchProducts = async () => {
     try {
       const response = await api.get('/products');
-      setProducts(response.data);
+      // La API devuelve { products: [...], pagination: {...} }
+      const productsData = response.data.products || response.data;
+      setProducts(productsData);
     } catch (error: any) {
-      const message = error.response?.data?.error || 'Error al cargar productos';
+      console.error('Error cargando productos:', error);
+      const message = error.response?.data?.error || error.response?.data?.message || 'Error al cargar productos';
       showError(message);
+      // No bloquear la UI, solo mostrar array vacío
+      setProducts([]);
     } finally {
       setLoading(false);
     }
