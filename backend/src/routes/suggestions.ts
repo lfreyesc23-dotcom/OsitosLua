@@ -1,9 +1,9 @@
 import { Router, Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
 import { protect, admin } from '../middleware/auth';
+import { prisma } from '../lib/prisma';
+import { logError } from '../lib/logger';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 // Obtener todas las sugerencias (solo admin)
 router.get('/', protect, admin, async (req: Request, res: Response): Promise<void> => {

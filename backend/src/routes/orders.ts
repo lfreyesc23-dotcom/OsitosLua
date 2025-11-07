@@ -1,11 +1,13 @@
 import express, { Response } from 'express';
-import { PrismaClient } from '@prisma/client';
 import Stripe from 'stripe';
 import { protect, AuthRequest } from '../middleware/auth';
 import { validateRut, cleanRut } from '../utils/rut';
+import { prisma } from '../lib/prisma';
+import { logError, logInfo } from '../lib/logger';
+import { asyncHandler, validateRequest } from '../middleware/errorHandler';
+import { checkoutValidator } from '../validators';
 
 const router = express.Router();
-const prisma = new PrismaClient();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16',
 });

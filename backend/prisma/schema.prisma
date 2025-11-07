@@ -52,6 +52,10 @@ model Product {
   reviews     Review[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+
+  @@index([categoria])
+  @@index([categoria, createdAt])
+  @@index([precio])
 }
 
 model Order {
@@ -83,6 +87,11 @@ model Order {
   
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+
+  @@index([status])
+  @@index([userId, status])
+  @@index([createdAt])
+  @@index([emailInvitado])
 }
 
 model Coupon {
@@ -99,6 +108,10 @@ model Coupon {
   orders          Order[]
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+
+  @@index([codigo])
+  @@index([activo, fechaExpiracion])
+  @@index([activo])
 }
 
 model Suggestion {
@@ -110,6 +123,9 @@ model Suggestion {
   respondido  Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([leido])
+  @@index([respondido])
 }
 
 model OrderItem {
@@ -135,6 +151,9 @@ model Review {
   updatedAt   DateTime @updatedAt
 
   @@unique([userId, productId]) // Un usuario solo puede dejar una review por producto
+  @@index([productId, aprobado])
+  @@index([userId])
+  @@index([aprobado])
 }
 
 model Newsletter {

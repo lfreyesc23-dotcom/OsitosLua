@@ -1,10 +1,10 @@
 import { Router, Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
 import { sendEmail } from '../utils/email';
 import { validateRut, cleanRut } from '../utils/rut';
+import { prisma } from '../lib/prisma';
+import { logError, logInfo } from '../lib/logger';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 // Enviar mensaje de contacto
 router.post('/', async (req: Request, res: Response): Promise<void> => {

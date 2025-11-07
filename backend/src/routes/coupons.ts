@@ -1,10 +1,10 @@
 import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-import { PrismaClient } from '@prisma/client';
 import { authenticateToken, requireAdmin, AuthRequest } from '../middleware/auth';
+import { prisma } from '../lib/prisma';
+import { logError } from '../lib/logger';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 // Validar un cupón (público)
 router.post('/validate', [

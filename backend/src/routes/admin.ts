@@ -1,9 +1,9 @@
 import express, { Response } from 'express';
-import { PrismaClient } from '@prisma/client';
 import { protect, admin, AuthRequest } from '../middleware/auth';
+import { prisma } from '../lib/prisma';
+import { logError } from '../lib/logger';
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
 // Todas las rutas de admin requieren autenticación y rol de administrador
 router.use(protect as any);

@@ -1,10 +1,10 @@
 import { Router, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
 import { protect, admin, AuthRequest } from '../middleware/auth';
 import { body, validationResult } from 'express-validator';
+import { prisma } from '../lib/prisma';
+import { logError } from '../lib/logger';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 // POST /api/newsletter/subscribe - Suscribirse al newsletter (público)
 router.post('/subscribe', [

@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
 import Stripe from 'stripe';
 import { sendOrderConfirmationEmail } from '../utils/email';
+import { prisma } from '../lib/prisma';
+import { logError, logInfo } from '../lib/logger';
 
 const router = express.Router();
-const prisma = new PrismaClient();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16',
 });
