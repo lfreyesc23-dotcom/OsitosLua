@@ -2,6 +2,7 @@ import express, { Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import Stripe from 'stripe';
 import { protect, AuthRequest } from '../middleware/auth';
+import { validateRut, cleanRut } from '../utils/rut';
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -39,6 +40,7 @@ router.post('/checkout', async (req: express.Request, res: Response) => {
       esInvitado = false, 
       emailInvitado, 
       nombreInvitado,
+      rutInvitado,
       direccion,
       ciudad,
       region,
@@ -58,6 +60,25 @@ router.post('/checkout', async (req: express.Request, res: Response) => {
         return res.status(400).json({ 
           message: 'Email, nombre y dirección completa son requeridos para compras como invitado' 
         });
+      }
+      
+      // Validar RUT si se proporcionó
+      if (rutInvitado) {
+        const cleanedRut = cleanRut(rutInvitado);
+        if (!validateRut(cleanedRut)) {
+          return res.status(400).json({ message: 'El RUT ingresado no es válido' });
+        }
+        
+        // Verificar si ya existe una cuenta con este RUT
+        const existingUser = await prisma.user.findUnique({
+          where: { rut: cleanedRut },
+        });
+        
+        if (existingUser) {
+          return res.status(400).json({ 
+            message: 'Ya existe una cuenta con este RUT. Por favor, inicia sesión para continuar.' 
+          });
+        }
       }
     }
 
@@ -149,6 +170,9 @@ router.post('/checkout', async (req: express.Request, res: Response) => {
     if (esInvitado) {
       orderData.emailInvitado = emailInvitado;
       orderData.nombreInvitado = nombreInvitado;
+      if (rutInvitado) {
+        orderData.rutInvitado = cleanRut(rutInvitado);
+      }
     } else if (userId) {
       orderData.userId = userId;
     }

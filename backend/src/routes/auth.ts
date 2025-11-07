@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { validateRut, cleanRut } from '../utils/rut';
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -9,11 +10,28 @@ const prisma = new PrismaClient();
 // Registrar usuario
 router.post('/register', async (req: Request, res: Response) => {
   try {
-    const { email, nombre, password } = req.body;
+    const { email, nombre, password, rut } = req.body;
 
     // Validar datos
     if (!email || !nombre || !password) {
       return res.status(400).json({ message: 'Todos los campos son requeridos' });
+    }
+
+    // Validar RUT si se proporcionó
+    if (rut) {
+      const cleanedRut = cleanRut(rut);
+      if (!validateRut(cleanedRut)) {
+        return res.status(400).json({ message: 'El RUT ingresado no es válido' });
+      }
+
+      // Verificar si el RUT ya existe
+      const existingRut = await prisma.user.findUnique({
+        where: { rut: cleanedRut },
+      });
+
+      if (existingRut) {
+        return res.status(400).json({ message: 'El RUT ya está registrado' });
+      }
     }
 
     // Verificar si el usuario ya existe
@@ -39,6 +57,7 @@ router.post('/register', async (req: Request, res: Response) => {
         nombre,
         password: hashedPassword,
         role,
+        rut: rut ? cleanRut(rut) : undefined,
       },
       select: {
         id: true,

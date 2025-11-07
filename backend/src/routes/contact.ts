@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { sendEmail } from '../utils/email';
+import { validateRut, cleanRut } from '../utils/rut';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -8,11 +9,20 @@ const prisma = new PrismaClient();
 // Enviar mensaje de contacto
 router.post('/', async (req: Request, res: Response): Promise<void> => {
   try {
-    const { nombre, email, mensaje } = req.body;
+    const { nombre, email, mensaje, rut } = req.body;
 
     if (!nombre || !email || !mensaje) {
       res.status(400).json({ error: 'Todos los campos son requeridos' });
       return;
+    }
+
+    // Validar RUT si se proporcionó
+    if (rut) {
+      const cleanedRut = cleanRut(rut);
+      if (!validateRut(cleanedRut)) {
+        res.status(400).json({ error: 'El RUT ingresado no es válido' });
+        return;
+      }
     }
 
     // Guardar en base de datos como sugerencia/contacto
@@ -37,6 +47,7 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
           <div style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin: 20px 0;">
             <p><strong>De:</strong> ${nombre}</p>
             <p><strong>Email:</strong> ${email}</p>
+            ${rut ? `<p><strong>RUT:</strong> ${rut}</p>` : ''}
             <p><strong>Fecha:</strong> ${new Date().toLocaleString('es-CL')}</p>
           </div>
           

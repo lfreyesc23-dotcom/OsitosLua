@@ -214,6 +214,13 @@ const CartPage = () => {
         checkoutData.nombreInvitado = shippingData.nombreInvitado;
         checkoutData.emailInvitado = shippingData.emailInvitado;
         checkoutData.rutInvitado = cleanRut(shippingData.rutInvitado);
+        
+        // Guardar datos del invitado en localStorage para usar después del checkout
+        localStorage.setItem('guestCheckoutData', JSON.stringify({
+          nombreInvitado: shippingData.nombreInvitado,
+          emailInvitado: shippingData.emailInvitado,
+          rutInvitado: shippingData.rutInvitado,
+        }));
       }
 
       const response = await api.post('/orders/checkout', checkoutData);

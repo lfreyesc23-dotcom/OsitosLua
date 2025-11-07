@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
+import RutInput from '../components/RutInput';
+import { validateRut, cleanRut } from '../utils/rut';
 
 const ContactPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nombre: '',
     email: '',
+    rut: '',
     mensaje: '',
   });
   const [loading, setLoading] = useState(false);
@@ -18,10 +21,24 @@ const ContactPage = () => {
     setLoading(true);
     setError('');
 
+    // Validar RUT si se proporcionó
+    if (formData.rut && !validateRut(formData.rut)) {
+      setError('El RUT ingresado no es válido');
+      setLoading(false);
+      return;
+    }
+
     try {
-      await axios.post('/contact', formData);
+      const dataToSend = {
+        nombre: formData.nombre,
+        email: formData.email,
+        mensaje: formData.mensaje,
+        rut: formData.rut ? cleanRut(formData.rut) : undefined,
+      };
+      
+      await axios.post('/contact', dataToSend);
       setSuccess(true);
-      setFormData({ nombre: '', email: '', mensaje: '' });
+      setFormData({ nombre: '', email: '', rut: '', mensaje: '' });
       
       setTimeout(() => {
         navigate('/');
@@ -92,6 +109,21 @@ const ContactPage = () => {
                   setFormData({ ...formData, email: e.target.value })
                 }
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                RUT (Opcional)
+              </label>
+              <RutInput
+                value={formData.rut}
+                onChange={(value) => setFormData({ ...formData, rut: value })}
+                placeholder="12.345.678-9"
+                showValidation={true}
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Ingresa tu RUT si deseas recibir respuestas personalizadas
+              </p>
             </div>
 
             <div>

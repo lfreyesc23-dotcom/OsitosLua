@@ -2,10 +2,13 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { trackSignUp } from '../utils/analytics';
+import RutInput from '../components/RutInput';
+import { validateRut, cleanRut } from '../utils/rut';
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [nombre, setNombre] = useState('');
+  const [rut, setRut] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -27,10 +30,15 @@ const RegisterPage = () => {
       return;
     }
 
+    if (!validateRut(rut)) {
+      setError('El RUT ingresado no es válido');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      await register(email, nombre, password);
+      await register(email, nombre, password, cleanRut(rut));
       trackSignUp('email'); // Trackear registro exitoso
       navigate('/');
     } catch (err: any) {
@@ -63,6 +71,18 @@ const RegisterPage = () => {
               className="input"
               required
               disabled={loading}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">RUT *</label>
+            <RutInput
+              value={rut}
+              onChange={setRut}
+              placeholder="12.345.678-9"
+              required
+              disabled={loading}
+              showValidation={true}
             />
           </div>
 
