@@ -1,14 +1,13 @@
+// Extender tipos de Express sin sobrescribir
 import { Request } from 'express';
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        id: string;
-        email: string;
-        role: string;
-      };
-      file?: Multer.File;
-    }
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: {
+      id: string;
+      email: string;
+      role: string;
+    };
+    file?: any;
   }
 }
