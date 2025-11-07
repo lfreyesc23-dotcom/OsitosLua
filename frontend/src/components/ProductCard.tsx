@@ -10,6 +10,7 @@ interface Product {
   nombre: string;
   descripcion: string;
   precio: number;
+  descuento?: number; // Porcentaje de descuento
   stock: number;
   imagenes: string[];
   categoria: string;
@@ -25,10 +26,10 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [inWishlist, setInWishlist] = useState(isInWishlist(product.id));
   
-  // Calcular descuento ficticio para hacer el diseño más atractivo
-  const hasDiscount = product.precio > 10000;
-  const discountPercentage = hasDiscount ? Math.floor(Math.random() * 30) + 10 : 0;
-  const originalPrice = hasDiscount ? Math.floor(product.precio * (1 + discountPercentage / 100)) : product.precio;
+  // Usar el descuento real del producto si existe
+  const hasDiscount = product.descuento && product.descuento > 0;
+  const discountPercentage = product.descuento || 0;
+  const discountedPrice = hasDiscount ? product.precio * (1 - discountPercentage / 100) : product.precio;
 
   // Formato de precio chileno
   const formatPrice = (price: number) => {
@@ -139,11 +140,11 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
         {/* Precio */}
         <div className="mt-4 flex items-center gap-2">
           <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600">
-            {formatPrice(product.precio)}
+            {formatPrice(discountedPrice)}
           </span>
           {hasDiscount && (
             <span className="text-sm text-gray-400 line-through">
-              {formatPrice(originalPrice)}
+              {formatPrice(product.precio)}
             </span>
           )}
         </div>

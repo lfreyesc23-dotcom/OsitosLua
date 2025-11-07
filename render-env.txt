@@ -12,4 +12,4 @@ EMAIL_PORT=587
 EMAIL_USER=demo@gmail.com
 EMAIL_PASSWORD=demo
 EMAIL_FROM=OsitosLua <noreply@ositoslua.cl>
-FRONTEND_URL=https://ositolua-cgdg9whlu-lfreyesc23-7805s-projects.vercel.app
+FRONTEND_URL=https://ositoslua.vercel.app

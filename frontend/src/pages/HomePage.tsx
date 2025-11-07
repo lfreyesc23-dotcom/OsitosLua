@@ -5,6 +5,7 @@ import ProductCard from '../components/ProductCard';
 import Footer from '../components/Footer';
 import RecentlyViewed from '../components/RecentlyViewed';
 import SEO from '../components/SEO';
+import DiscountWheel from '../components/DiscountWheel';
 import { useCart } from '../contexts/CartContext';
 import { showSuccess, showError } from '../utils/notifications';
 import { trackSearch } from '../utils/analytics';
@@ -19,6 +20,7 @@ interface Product {
   nombre: string;
   descripcion: string;
   precio: number;
+  descuento?: number; // Porcentaje de descuento
   stock: number;
   imagenes: string[];
   categoria: string;
@@ -28,6 +30,7 @@ const HomePage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>('all');
+  const [showWheel, setShowWheel] = useState(false);
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('search') || '';
   const { addToCart } = useCart();
@@ -47,6 +50,18 @@ const HomePage = () => {
     }
   }, [searchQuery]);
 
+  // Verificar si es primera visita y mostrar ruleta
+  useEffect(() => {
+    const hasUsedWheel = localStorage.getItem('wheelUsed');
+    if (!hasUsedWheel) {
+      // Mostrar ruleta después de 2 segundos
+      const timer = setTimeout(() => {
+        setShowWheel(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   const fetchProducts = async () => {
     try {
       const response = await api.get('/products');
@@ -62,6 +77,10 @@ const HomePage = () => {
   const handleAddToCart = (product: Product) => {
     addToCart(product);
     showSuccess('Producto agregado al carrito');
+  };
+
+  const handleWheelWin = (discount: number) => {
+    showSuccess(`🎉 ¡Felicitaciones! Ganaste ${discount}% de descuento`);
   };
 
   const categories = ['all', ...new Set(products.map((p) => p.categoria))];
@@ -128,27 +147,32 @@ const HomePage = () => {
         }}
       />
       
-      {/* Hero Banner */}
+      {/* Hero Banner - Enfocado en productos */}
       <div className="relative overflow-hidden bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500">
         <div className="absolute inset-0 bg-black opacity-10"></div>
-        <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
-          <div className="max-w-3xl">
+        <div className="container mx-auto px-4 py-12 md:py-16 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 animate-fade-in">
-              🧸 OsitosLua
+              🧸 Los peluches más tiernos de Chile
             </h1>
             <p className="text-xl md:text-2xl text-white/90 mb-6">
-              Los mejores peluches para ti y tus seres queridos
+              Calidad Premium • Envío Gratis a Lo Valledor • Descuentos Especiales
             </p>
-            <p className="text-lg text-white/80 mb-8">
-              Productos importados • Calidad Premium • Precios Increíbles
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link to="/contact" className="bg-white text-purple-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition shadow-lg">
-                📞 Contactar
-              </Link>
-              <a href="#productos" className="bg-purple-600 text-white px-8 py-3 rounded-full font-bold hover:bg-purple-700 transition shadow-lg">
-                Ver Productos
-              </a>
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 inline-block">
+              <p className="text-2xl md:text-3xl font-bold text-white mb-2">
+                🎁 ¡Gira la ruleta y gana hasta 15% de descuento!
+              </p>
+              <p className="text-white/90 mb-4">
+                Válido para tu primera compra
+              </p>
+              {!localStorage.getItem('wheelUsed') && (
+                <button
+                  onClick={() => setShowWheel(true)}
+                  className="bg-white text-purple-600 px-8 py-3 rounded-full font-bold hover:bg-purple-100 transition-all transform hover:scale-105 shadow-lg"
+                >
+                  🎡 ¡Girar Ruleta Ahora!
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -358,6 +382,14 @@ const HomePage = () => {
 
       {/* Footer con información */}
       <Footer />
+
+      {/* Ruleta de Descuentos */}
+      {showWheel && (
+        <DiscountWheel
+          onClose={() => setShowWheel(false)}
+          onWin={handleWheelWin}
+        />
+      )}
     </div>
   );
 };

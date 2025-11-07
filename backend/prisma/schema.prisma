@@ -43,6 +43,7 @@ model Product {
   nombre      String
   descripcion String
   precio      Float
+  descuento   Float       @default(0) // Porcentaje de descuento
   stock       Int
   imagenes    String[]
   categoria   String
