@@ -91,7 +91,7 @@ const CartPage = () => {
   };
 
   // Función auxiliar para actualizar dirección desde el autocompletado
-  const handleAddressSelect = (lat: number, lon: number, comuna: string, postalCode?: string) => {
+  const handleAddressSelect = (_lat: number, _lon: number, comuna: string, postalCode?: string) => {
     setShippingData(prev => ({
       ...prev,
       ciudad: comuna,
