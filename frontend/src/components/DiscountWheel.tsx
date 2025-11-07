@@ -24,6 +24,8 @@ const DiscountWheel = ({ onClose, onWin }: DiscountWheelProps) => {
     { discount: 5, color: 'from-pink-400 to-pink-600', label: '5% OFF', textColor: 'text-white' },
   ];
 
+  const segmentAngle = 360 / segments.length;
+
   const spinWheel = async () => {
     if (isSpinning) return;
 
@@ -130,7 +132,7 @@ const DiscountWheel = ({ onClose, onWin }: DiscountWheelProps) => {
             }}
           >
             {segments.map((segment, index) => {
-              const angle = (360 / segments.length) * index;
+              const angle = segmentAngle * index;
               return (
                 <div
                   key={index}
@@ -142,10 +144,14 @@ const DiscountWheel = ({ onClose, onWin }: DiscountWheelProps) => {
                   }}
                 >
                   <div 
-                    className={`absolute top-12 left-1/2 ${segment.textColor} font-extrabold text-base drop-shadow-lg`}
+                    className={`absolute ${segment.textColor} font-extrabold text-base drop-shadow-lg`}
                     style={{ 
-                      transform: 'translateX(-50%)',
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+                      top: '50%',
+                      left: '50%',
+                      transform: `translate(-50%, -120%) rotate(${-angle - segmentAngle / 2}deg)`,
+                      transformOrigin: 'center',
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                      whiteSpace: 'nowrap'
                     }}
                   >
                     {segment.label}
