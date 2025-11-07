@@ -7,6 +7,8 @@ import { showSuccess, showError, showWarning } from '../utils/notifications';
 import { trackBeginCheckout } from '../utils/analytics';
 import AddressAutocomplete from '../components/AddressAutocomplete';
 import { calculateShippingCost } from '../utils/geocoding';
+import RutInput from '../components/RutInput';
+import { validateRut, cleanRut } from '../utils/rut';
 
 const CartPage = () => {
   const { items, removeFromCart, updateQuantity, clearCart, total } = useCart();
@@ -22,6 +24,7 @@ const CartPage = () => {
     esInvitado: !user,
     nombreInvitado: '',
     emailInvitado: '',
+    rutInvitado: '',
     direccion: '',
     ciudad: '',
     region: 'Región Metropolitana',
@@ -160,9 +163,15 @@ const CartPage = () => {
     // Si no hay usuario, validar datos de invitado
     if (!user) {
       if (!shippingData.nombreInvitado || !shippingData.emailInvitado || 
-          !shippingData.direccion || !shippingData.ciudad) {
+          !shippingData.rutInvitado || !shippingData.direccion || !shippingData.ciudad) {
         setShowShippingForm(true);
         showWarning('Por favor completa todos los datos de envío');
+        return;
+      }
+      
+      // Validar RUT
+      if (!validateRut(shippingData.rutInvitado)) {
+        showError('El RUT ingresado no es válido');
         return;
       }
     } else {
@@ -204,6 +213,7 @@ const CartPage = () => {
         checkoutData.esInvitado = true;
         checkoutData.nombreInvitado = shippingData.nombreInvitado;
         checkoutData.emailInvitado = shippingData.emailInvitado;
+        checkoutData.rutInvitado = cleanRut(shippingData.rutInvitado);
       }
 
       const response = await api.post('/orders/checkout', checkoutData);
@@ -281,7 +291,7 @@ const CartPage = () => {
               <>
                 <input
                   type="text"
-                  placeholder="Tu nombre *"
+                  placeholder="Tu nombre completo *"
                   className="input mb-3"
                   value={shippingData.nombreInvitado}
                   onChange={(e) => setShippingData({...shippingData, nombreInvitado: e.target.value})}
@@ -293,6 +303,19 @@ const CartPage = () => {
                   value={shippingData.emailInvitado}
                   onChange={(e) => setShippingData({...shippingData, emailInvitado: e.target.value})}
                 />
+                <div className="mb-3">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    RUT *
+                  </label>
+                  <RutInput
+                    value={shippingData.rutInvitado}
+                    onChange={(value) => setShippingData({...shippingData, rutInvitado: value})}
+                    placeholder="12.345.678-9"
+                    className="input w-full"
+                    required
+                    showValidation
+                  />
+                </div>
               </>
             )}
             
