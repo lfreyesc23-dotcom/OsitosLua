@@ -12,12 +12,14 @@ export const registerValidator: ValidationChain[] = [
   body('nombre')
     .trim()
     .isLength({ min: 2, max: 100 })
-    .withMessage('Nombre debe tener entre 2 y 100 caracteres'),
+    .withMessage('Nombre debe tener entre 2 y 100 caracteres')
+    .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)
+    .withMessage('Nombre solo debe contener letras'),
   body('password')
-    .isLength({ min: 6, max: 100 })
-    .withMessage('Contraseña debe tener al menos 6 caracteres')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-    .withMessage('Contraseña debe contener al menos una mayúscula, una minúscula y un número'),
+    .isLength({ min: 8, max: 100 })
+    .withMessage('Contraseña debe tener al menos 8 caracteres')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+    .withMessage('Contraseña debe contener al menos: una mayúscula, una minúscula, un número y un carácter especial (@$!%*?&)'),
   body('rut')
     .optional()
     .trim()

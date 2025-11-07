@@ -14,8 +14,10 @@ import { logger, logInfo, logError } from './lib/logger';
 import { prisma } from './lib/prisma';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 
-// Validar env antes de continuar
-validateEnv();
+// Validar env solo si no estamos en build
+if (process.env.npm_lifecycle_event !== 'build') {
+  validateEnv();
+}
 
 // Importar rutas
 import authRoutes from './routes/auth';
