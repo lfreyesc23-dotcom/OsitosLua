@@ -78,6 +78,51 @@ router.post('/validate', [
   }
 });
 
+// Crear cupón de ruleta (público - para cuando el usuario gana)
+router.post('/create-wheel-discount', [
+  body('discount').isInt({ min: 5, max: 15 }).withMessage('El descuento debe ser 5, 10 o 15')
+], async (req: Request, res: Response) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const { discount } = req.body;
+    
+    // Generar código único para el cupón
+    const randomSuffix = Math.random().toString(36).substring(2, 8).toUpperCase();
+    const codigo = `RULETA${discount}-${randomSuffix}`;
+    
+    // Crear cupón en la base de datos
+    const coupon = await prisma.coupon.create({
+      data: {
+        codigo,
+        tipo: 'PERCENTAGE',
+        valor: discount,
+        minCompra: 0,
+        maxUsos: 1, // Solo una vez
+        usosActuales: 0,
+        activo: true,
+        fechaInicio: new Date(),
+        fechaExpiracion: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 días
+      }
+    });
+
+    res.json({
+      success: true,
+      coupon: {
+        codigo: coupon.codigo,
+        discount: coupon.valor,
+        expiresAt: coupon.fechaExpiracion
+      }
+    });
+  } catch (error) {
+    console.error('Error creando cupón de ruleta:', error);
+    res.status(500).json({ message: 'Error al crear el cupón de ruleta' });
+  }
+});
+
 // ========================================
 // RUTAS DE ADMINISTRADOR
 // ========================================

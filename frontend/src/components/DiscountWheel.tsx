@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { showSuccess, showError } from '../utils/notifications';
+import api from '../api/axios';
 
 interface DiscountWheelProps {
   onClose: () => void;
@@ -36,7 +37,7 @@ const DiscountWheel = ({ onClose, onWin }: DiscountWheelProps) => {
     setRotation(totalRotation);
 
     // Calcular el segmento ganador
-    setTimeout(() => {
+    setTimeout(async () => {
       const normalizedRotation = totalRotation % 360;
       const segmentAngle = 360 / segments.length;
       const segmentIndex = Math.floor((360 - normalizedRotation) / segmentAngle) % segments.length;
@@ -49,16 +50,33 @@ const DiscountWheel = ({ onClose, onWin }: DiscountWheelProps) => {
       localStorage.setItem('wheelUsed', 'true');
       
       if (wonDiscount > 0) {
-        // Guardar cupón de descuento
-        const couponCode = `RULETA${wonDiscount}`;
-        localStorage.setItem('wheelDiscount', JSON.stringify({
-          code: couponCode,
-          discount: wonDiscount,
-          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 días
-        }));
-        
-        showSuccess(`🎉 ¡Ganaste ${wonDiscount}% de descuento! Código: ${couponCode}`);
-        onWin(wonDiscount);
+        // Crear cupón en el backend
+        try {
+          const { data } = await api.post('/coupons/create-wheel-discount', {
+            discount: wonDiscount
+          });
+          
+          // Guardar cupón en localStorage
+          localStorage.setItem('wheelDiscount', JSON.stringify({
+            code: data.coupon.codigo,
+            discount: wonDiscount,
+            expiresAt: data.coupon.expiresAt
+          }));
+          
+          showSuccess(`🎉 ¡Ganaste ${wonDiscount}% de descuento! Código: ${data.coupon.codigo}`);
+          onWin(wonDiscount);
+        } catch (error) {
+          console.error('Error creando cupón:', error);
+          // Fallback: guardar solo en localStorage si falla el backend
+          const couponCode = `RULETA${wonDiscount}`;
+          localStorage.setItem('wheelDiscount', JSON.stringify({
+            code: couponCode,
+            discount: wonDiscount,
+            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+          }));
+          showSuccess(`🎉 ¡Ganaste ${wonDiscount}% de descuento! Código: ${couponCode}`);
+          onWin(wonDiscount);
+        }
       } else {
         showError('¡Sigue participando! Intenta de nuevo en tu próxima visita');
       }
