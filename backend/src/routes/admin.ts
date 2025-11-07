@@ -10,7 +10,7 @@ router.use(protect as any);
 router.use(admin as any);
 
 // Obtener reportes
-router.get('/reportes', async (req: AuthRequest, res: Response) => {
+router.get('/reportes', async (req: any, res: any) => {
   try {
     const totalUsers = await prisma.user.count();
     const totalProducts = await prisma.product.count();
@@ -50,7 +50,7 @@ router.get('/reportes', async (req: AuthRequest, res: Response) => {
 });
 
 // Crear producto
-router.post('/products', async (req: AuthRequest, res: Response) => {
+router.post('/products', async (req: any, res: any) => {
   try {
     const { nombre, descripcion, precio, stock, imagenes, categoria } = req.body;
 
@@ -77,7 +77,7 @@ router.post('/products', async (req: AuthRequest, res: Response) => {
 });
 
 // Actualizar producto
-router.put('/products/:id', async (req: AuthRequest, res: Response) => {
+router.put('/products/:id', async (req: any, res: any) => {
   try {
     const { id } = req.params;
     const { nombre, descripcion, precio, stock, imagenes, categoria } = req.body;
@@ -102,7 +102,7 @@ router.put('/products/:id', async (req: AuthRequest, res: Response) => {
 });
 
 // Eliminar producto
-router.delete('/products/:id', async (req: AuthRequest, res: Response) => {
+router.delete('/products/:id', async (req: any, res: any) => {
   try {
     const { id } = req.params;
 
@@ -118,7 +118,7 @@ router.delete('/products/:id', async (req: AuthRequest, res: Response) => {
 });
 
 // Ver todas las órdenes
-router.get('/orders', async (req: AuthRequest, res: Response) => {
+router.get('/orders', async (req: any, res: any) => {
   try {
     const orders = await prisma.order.findMany({
       orderBy: { createdAt: 'desc' },
@@ -145,7 +145,7 @@ router.get('/orders', async (req: AuthRequest, res: Response) => {
 });
 
 // Actualizar estado de orden
-router.patch('/orders/:id/status', async (req: AuthRequest, res: Response) => {
+router.patch('/orders/:id/status', async (req: any, res: any) => {
   try {
     const { id } = req.params;
     const { status } = req.body;

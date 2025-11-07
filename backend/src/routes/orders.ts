@@ -10,7 +10,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 // Ver mis órdenes (protegido)
-router.get('/my-orders', protect as any, async (req: AuthRequest, res: Response) => {
+router.get('/my-orders', protect as any, async (req: any, res: any) => {
   try {
     const orders = await prisma.order.findMany({
       where: { userId: req.user!.id },

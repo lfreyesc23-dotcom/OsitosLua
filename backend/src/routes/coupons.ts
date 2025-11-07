@@ -109,7 +109,7 @@ router.post('/', authenticateToken, requireAdmin, [
   body('minCompra').optional().isFloat({ min: 0 }),
   body('maxUsos').optional().isInt({ min: 1 }),
   body('fechaExpiracion').optional().isISO8601()
-], async (req: AuthRequest, res: Response) => {
+], async (req: any, res: any) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -153,7 +153,7 @@ router.put('/:id', authenticateToken, requireAdmin, [
   body('maxUsos').optional().isInt({ min: 1 }),
   body('fechaExpiracion').optional().isISO8601(),
   body('activo').optional().isBoolean()
-], async (req: AuthRequest, res: Response) => {
+], async (req: any, res: any) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });

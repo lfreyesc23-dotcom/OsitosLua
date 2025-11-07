@@ -14,7 +14,7 @@ const reviewValidation = [
 ];
 
 // POST /api/reviews - Crear review (requiere autenticación)
-router.post('/', protect, reviewValidation, async (req: AuthRequest, res: Response) => {
+router.post('/', protect, reviewValidation, async (req: any, res: any) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -74,7 +74,7 @@ router.post('/', protect, reviewValidation, async (req: AuthRequest, res: Respon
 // GET /api/reviews/product/:productId - Obtener reviews aprobadas de un producto (público)
 router.get('/product/:productId', [
   param('productId').isUUID().withMessage('ID de producto inválido'),
-], async (req: AuthRequest, res: Response) => {
+], async (req: any, res: any) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -129,7 +129,7 @@ router.get('/product/:productId', [
 });
 
 // GET /api/reviews/my-reviews - Obtener reviews del usuario autenticado
-router.get('/my-reviews', protect, async (req: AuthRequest, res: Response) => {
+router.get('/my-reviews', protect, async (req: any, res: any) => {
   try {
     const userId = req.user!.id;
 
@@ -163,7 +163,7 @@ router.put('/:id', protect, [
   param('id').isUUID().withMessage('ID de review inválido'),
   body('rating').optional().isInt({ min: 1, max: 5 }).withMessage('Rating debe ser entre 1 y 5'),
   body('comentario').optional().trim().isLength({ min: 10, max: 1000 }).withMessage('Comentario debe tener entre 10 y 1000 caracteres'),
-], async (req: AuthRequest, res: Response) => {
+], async (req: any, res: any) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -219,7 +219,7 @@ router.put('/:id', protect, [
 // DELETE /api/reviews/:id - Eliminar propia review
 router.delete('/:id', protect, [
   param('id').isUUID().withMessage('ID de review inválido'),
-], async (req: AuthRequest, res: Response) => {
+], async (req: any, res: any) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -256,7 +256,7 @@ router.delete('/:id', protect, [
 // --- RUTAS DE ADMINISTRACIÓN ---
 
 // GET /api/reviews/admin/pending - Obtener reviews pendientes de aprobación
-router.get('/admin/pending', protect, admin, async (req: AuthRequest, res: Response) => {
+router.get('/admin/pending', protect, admin, async (req: any, res: any) => {
   try {
     const reviews = await prisma.review.findMany({
       where: {
@@ -289,7 +289,7 @@ router.get('/admin/pending', protect, admin, async (req: AuthRequest, res: Respo
 });
 
 // GET /api/reviews/admin/all - Obtener todas las reviews (aprobadas y pendientes)
-router.get('/admin/all', protect, admin, async (req: AuthRequest, res: Response) => {
+router.get('/admin/all', protect, admin, async (req: any, res: any) => {
   try {
     const reviews = await prisma.review.findMany({
       include: {
@@ -331,7 +331,7 @@ router.get('/admin/all', protect, admin, async (req: AuthRequest, res: Response)
 // PUT /api/reviews/admin/:id/approve - Aprobar review
 router.put('/admin/:id/approve', protect, admin, [
   param('id').isUUID().withMessage('ID de review inválido'),
-], async (req: AuthRequest, res: Response) => {
+], async (req: any, res: any) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -377,7 +377,7 @@ router.put('/admin/:id/approve', protect, admin, [
 // PUT /api/reviews/admin/:id/reject - Rechazar/eliminar review
 router.put('/admin/:id/reject', protect, admin, [
   param('id').isUUID().withMessage('ID de review inválido'),
-], async (req: AuthRequest, res: Response) => {
+], async (req: any, res: any) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

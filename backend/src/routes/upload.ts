@@ -27,7 +27,7 @@ router.post(
   protect as any,
   admin as any,
   upload.single('image'),
-  async (req: AuthRequest, res: Response) => {
+  async (req: any, res: any) => {
     try {
       if (!req.file) {
         return res.status(400).json({ message: 'No se proporcionó ninguna imagen' });

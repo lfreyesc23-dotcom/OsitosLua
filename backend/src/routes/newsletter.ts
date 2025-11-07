@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 // POST /api/newsletter/subscribe - Suscribirse al newsletter (público)
 router.post('/subscribe', [
   body('email').isEmail().withMessage('Email inválido').normalizeEmail(),
-], async (req: AuthRequest, res: Response) => {
+], async (req: any, res: any) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -55,7 +55,7 @@ router.post('/subscribe', [
 // POST /api/newsletter/unsubscribe - Desuscribirse (público)
 router.post('/unsubscribe', [
   body('email').isEmail().withMessage('Email inválido').normalizeEmail(),
-], async (req: AuthRequest, res: Response) => {
+], async (req: any, res: any) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -88,7 +88,7 @@ router.post('/unsubscribe', [
 // --- RUTAS DE ADMINISTRACIÓN ---
 
 // GET /api/newsletter/admin/subscribers - Obtener todos los suscriptores (admin)
-router.get('/admin/subscribers', protect, admin, async (req: AuthRequest, res: Response) => {
+router.get('/admin/subscribers', protect, admin, async (req: any, res: any) => {
   try {
     const { activo } = req.query;
 
@@ -115,7 +115,7 @@ router.get('/admin/subscribers', protect, admin, async (req: AuthRequest, res: R
 });
 
 // DELETE /api/newsletter/admin/:id - Eliminar suscriptor permanentemente (admin)
-router.delete('/admin/:id', protect, admin, async (req: AuthRequest, res: Response) => {
+router.delete('/admin/:id', protect, admin, async (req: any, res: any) => {
   try {
     const { id } = req.params;
 
@@ -139,7 +139,7 @@ router.delete('/admin/:id', protect, admin, async (req: AuthRequest, res: Respon
 });
 
 // POST /api/newsletter/admin/export - Exportar emails para campaña (admin)
-router.get('/admin/export', protect, admin, async (req: AuthRequest, res: Response) => {
+router.get('/admin/export', protect, admin, async (req: any, res: any) => {
   try {
     const subscribers = await prisma.newsletter.findMany({
       where: { activo: true },
