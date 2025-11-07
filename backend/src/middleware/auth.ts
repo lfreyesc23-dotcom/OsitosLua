@@ -10,7 +10,6 @@ export interface AuthRequest extends Request {
     email: string;
     role: string;
   };
-  file?: Express.Multer.File;
 }
 
 export const protect = async (
@@ -21,11 +20,10 @@ export const protect = async (
   try {
     let token;
 
-    if (
-      req.headers?.authorization &&
-      req.headers.authorization.startsWith('Bearer')
-    ) {
-      token = req.headers.authorization.split(' ')[1];
+    const authorization = req.headers?.authorization || req.get('authorization');
+    
+    if (authorization && authorization.startsWith('Bearer')) {
+      token = authorization.split(' ')[1];
     }
 
     if (!token) {

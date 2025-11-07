@@ -1,0 +1,15 @@
+    =postgresql://ositoslua_user:TSxmuiZqA8EvVVH4sihJWPBn9speD3yX@dpg-d46nch63jp1c73alsaq0-a/ositoslua
+JWT_SECRET=ositoslua-super-secret-jwt-2025-cambiar-en-produccion
+PORT=3000
+CLOUDINARY_CLOUD_NAME=demo
+CLOUDINARY_API_KEY=demo
+CLOUDINARY_API_SECRET=demo
+STRIPE_SECRET_KEY=sk_test_demo
+STRIPE_WEBHOOK_SECRET=whsec_demo
+STRIPE_PUBLIC_KEY=pk_test_demo
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=demo@gmail.com
+EMAIL_PASSWORD=demo
+EMAIL_FROM=OsitosLua <noreply@ositoslua.cl>
+FRONTEND_URL=https://ositolua-cgdg9whlu-lfreyesc23-7805s-projects.vercel.app
