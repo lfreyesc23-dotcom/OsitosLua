@@ -4,6 +4,25 @@ E-commerce moderno y profesional construido con React, Node.js, TypeScript y Pos
 
 > **⚡ PROYECTO 100% COMPLETO Y LISTO PARA PRODUCCIÓN** 
 
+## 🚀 Inicio Rápido
+
+### Opción 1: Script Automático (Recomendado)
+```bash
+./start-dev.sh
+```
+
+### Opción 2: NPM (Multiplataforma)
+```bash
+npm run dev
+```
+
+### Opción 3: Ver Estado
+```bash
+./status.sh
+```
+
+📖 **Guía completa:** [INICIO_RAPIDO.md](./INICIO_RAPIDO.md)
+
 ## ✨ Features Implementadas (100%)
 
 ### �️ E-commerce Core
