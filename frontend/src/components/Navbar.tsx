@@ -83,15 +83,6 @@ const Navbar = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-6">
-            {/* Contact link */}
-            <Link 
-              to="/contact" 
-              className="hidden md:flex items-center gap-2 text-gray-700 hover:text-purple-600 transition-colors font-medium"
-            >
-              <span className="text-xl">💬</span>
-              <span className="hidden lg:inline">Contacto</span>
-            </Link>
-
             {/* Wishlist */}
             <Link 
               to="/wishlist" 
