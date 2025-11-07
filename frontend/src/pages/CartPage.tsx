@@ -1,10 +1,12 @@
 import { useCart } from '../contexts/CartContext';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../api/axios';
 import { showSuccess, showError, showWarning } from '../utils/notifications';
 import { trackBeginCheckout } from '../utils/analytics';
+import AddressAutocomplete from '../components/AddressAutocomplete';
+import { calculateShippingCost } from '../utils/geocoding';
 
 const CartPage = () => {
   const { items, removeFromCart, updateQuantity, clearCart, total } = useCart();
@@ -28,30 +30,84 @@ const CartPage = () => {
   
   const [costoEnvio, setCostoEnvio] = useState(0);
   const [mensajeEnvio, setMensajeEnvio] = useState('');
+  const [calculandoEnvio, setCalculandoEnvio] = useState(false);
   
   // Cupón
   const [codigoCupon, setCodigoCupon] = useState('');
   const [cuponAplicado, setCuponAplicado] = useState<any>(null);
   const [validandoCupon, setValidandoCupon] = useState(false);
 
+  // Verificar si hay cupón de ruleta al cargar
+  useEffect(() => {
+    const wheelDiscount = localStorage.getItem('wheelDiscount');
+    if (wheelDiscount && !cuponAplicado) {
+      try {
+        const discount = JSON.parse(wheelDiscount);
+        const expiresAt = new Date(discount.expiresAt);
+        
+        // Verificar si no ha expirado
+        if (expiresAt > new Date()) {
+          setCodigoCupon(discount.code);
+          showSuccess(`🎉 Tienes un cupón de ${discount.discount}% de la ruleta disponible!`);
+        } else {
+          // Limpiar cupón expirado
+          localStorage.removeItem('wheelDiscount');
+        }
+      } catch (error) {
+        console.error('Error leyendo cupón de ruleta:', error);
+      }
+    }
+  }, [cuponAplicado]);
+
   const calcularEnvio = async () => {
-    if (!shippingData.ciudad || !shippingData.region) {
-      showWarning('Por favor completa ciudad y región');
+    if (!shippingData.direccion || !shippingData.ciudad) {
+      showWarning('Por favor completa la dirección y comuna');
       return;
     }
 
     try {
-      const { data } = await api.post('/shipping/calculate', {
-        ciudad: shippingData.ciudad,
-        region: shippingData.region,
-      });
-      setCostoEnvio(data.costoEnvio);
-      setMensajeEnvio(data.mensaje);
-      showSuccess('Costo de envío calculado');
+      setCalculandoEnvio(true);
+      
+      // Usar el nuevo sistema de geolocalización
+      const result = await calculateShippingCost(
+        shippingData.direccion,
+        shippingData.ciudad
+      );
+      
+      setCostoEnvio(result.costo);
+      setMensajeEnvio(result.mensaje);
+      
+      if (result.costo > 0) {
+        showSuccess(`Costo de envío: $${result.costo.toLocaleString('es-CL')}`);
+      } else {
+        showWarning(result.mensaje);
+      }
     } catch (error: any) {
-      const message = error.response?.data?.error || 'Error al calcular envío';
+      const message = error?.message || 'Error al calcular envío';
       showError(message);
+    } finally {
+      setCalculandoEnvio(false);
     }
+  };
+
+  // Función auxiliar para actualizar dirección desde el autocompletado
+  const handleAddressSelect = (lat: number, lon: number, comuna: string, postalCode?: string) => {
+    setShippingData(prev => ({
+      ...prev,
+      ciudad: comuna,
+      codigoPostal: postalCode || prev.codigoPostal
+    }));
+    
+    // Calcular envío automáticamente
+    setTimeout(() => {
+      calculateShippingCost(shippingData.direccion, comuna).then(result => {
+        setCostoEnvio(result.costo);
+        setMensajeEnvio(result.mensaje);
+        if (result.costo > 0) {
+          showSuccess(`Costo de envío: $${result.costo.toLocaleString('es-CL')}`);
+        }
+      });
+    }, 100);
   };
 
   const validarCupon = async () => {
@@ -240,17 +296,31 @@ const CartPage = () => {
               </>
             )}
             
-            <input
-              type="text"
-              placeholder="Dirección completa *"
-              className="input mb-3"
-              value={shippingData.direccion}
-              onChange={(e) => setShippingData({...shippingData, direccion: e.target.value})}
-            />
+            <div className="mb-3">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Dirección completa *
+              </label>
+              <AddressAutocomplete
+                value={shippingData.direccion}
+                onChange={(address, postalCode) => {
+                  setShippingData({
+                    ...shippingData, 
+                    direccion: address,
+                    codigoPostal: postalCode || shippingData.codigoPostal
+                  });
+                }}
+                onSelect={handleAddressSelect}
+                placeholder="Ej: Av. La Florida 8555, La Florida"
+                className="input w-full"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                💡 Empieza a escribir y selecciona de las sugerencias
+              </p>
+            </div>
             
             <input
               type="text"
-              placeholder="Ciudad *"
+              placeholder="Comuna *"
               className="input mb-3"
               value={shippingData.ciudad}
               onChange={(e) => setShippingData({...shippingData, ciudad: e.target.value})}
@@ -281,9 +351,21 @@ const CartPage = () => {
             
             <button
               onClick={calcularEnvio}
-              className="btn-outline w-full mb-2"
+              disabled={calculandoEnvio || !shippingData.direccion || !shippingData.ciudad}
+              className={`w-full mb-2 px-4 py-3 rounded-lg font-semibold transition-all ${
+                calculandoEnvio || !shippingData.direccion || !shippingData.ciudad
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-purple-600 text-white hover:bg-purple-700'
+              }`}
             >
-              Calcular Costo de Envío
+              {calculandoEnvio ? (
+                <span className="flex items-center justify-center gap-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  Calculando...
+                </span>
+              ) : (
+                '📍 Calcular Costo de Envío'
+              )}
             </button>
             
             {mensajeEnvio && (
@@ -302,6 +384,24 @@ const CartPage = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 🎟️ ¿Tienes un cupón de descuento?
               </label>
+              
+              {/* Mensaje de cupón de ruleta disponible */}
+              {codigoCupon && !cuponAplicado && codigoCupon.startsWith('RULETA') && (
+                <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-3 mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">🎉</span>
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold text-purple-700">
+                        ¡Cupón de ruleta detectado!
+                      </p>
+                      <p className="text-xs text-purple-600">
+                        Haz clic en "Aplicar" para usar tu descuento
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
               {!cuponAplicado ? (
                 <div className="flex gap-2">
                   <input
