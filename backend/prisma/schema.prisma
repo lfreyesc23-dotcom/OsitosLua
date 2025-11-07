@@ -1,0 +1,143 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  SHIPPED
+}
+
+enum CouponType {
+  PERCENTAGE
+  FIXED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  nombre    String
+  password  String
+  role      Role     @default(USER)
+  orders    Order[]
+  reviews   Review[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id          String      @id @default(uuid())
+  nombre      String
+  descripcion String
+  precio      Float
+  stock       Int
+  imagenes    String[]
+  categoria   String
+  orderItems  OrderItem[]
+  reviews     Review[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  total           Float
+  status          OrderStatus @default(PENDING)
+  user            User?       @relation(fields: [userId], references: [id])
+  userId          String?
+  orderItems      OrderItem[]
+  stripeSessionId String?     @unique
+  
+  // Cupón aplicado
+  coupon          Coupon?     @relation(fields: [couponId], references: [id])
+  couponId        String?
+  descuento       Float       @default(0)
+  
+  // Datos de invitado
+  esInvitado      Boolean     @default(false)
+  emailInvitado   String?
+  nombreInvitado  String?
+  
+  // Dirección de envío
+  direccion       String?
+  ciudad          String?
+  region          String?
+  codigoPostal    String?
+  costoEnvio      Float       @default(0)
+  
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Coupon {
+  id              String      @id @default(uuid())
+  codigo          String      @unique
+  tipo            CouponType
+  valor           Float       // Porcentaje (0-100) o valor fijo en CLP
+  minCompra       Float       @default(0) // Monto mínimo de compra requerido
+  maxUsos         Int?        // Máximo de usos totales (null = ilimitado)
+  usosActuales    Int         @default(0)
+  activo          Boolean     @default(true)
+  fechaInicio     DateTime    @default(now())
+  fechaExpiracion DateTime?   // null = no expira
+  orders          Order[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Suggestion {
+  id          String   @id @default(uuid())
+  nombre      String
+  email       String
+  mensaje     String
+  leido       Boolean  @default(false)
+  respondido  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  cantidad  Int
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  createdAt DateTime @default(now())
+}
+
+model Review {
+  id          String   @id @default(uuid())
+  rating      Int      // 1-5 estrellas
+  comentario  String
+  aprobado    Boolean  @default(false) // Moderación admin
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, productId]) // Un usuario solo puede dejar una review por producto
+}
+
+model Newsletter {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

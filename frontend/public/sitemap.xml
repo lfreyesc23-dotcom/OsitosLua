@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://ositoslua.cl/</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/about</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/contact</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/faq</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/wishlist</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/terms</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/privacy</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/returns</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/product/f2d7c213-2bfd-4016-93af-586f851f1515</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://res.cloudinary.com/douj0sfxp/image/upload/v1762478362/ositoslua/idifywyfx26qsznmfpd1.png</image:loc>
+      <image:title>Pliplin</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/product/cda4e31d-824b-43f5-bf7e-cc04488a7693</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1564399579883-451a5d44ec08?w=600</image:loc>
+      <image:title>Oso Panda Gigante</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1527736947477-2790e28f3443?w=600</image:loc>
+      <image:title>Oso Panda Gigante</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/product/a77801ae-5c25-45c9-834a-c93fd6e25d53</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1585664811087-47f65abbad64?w=600</image:loc>
+      <image:title>Conejo Rosa Kawaii</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1589883661923-6476cb0ae9f2?w=600</image:loc>
+      <image:title>Conejo Rosa Kawaii</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/product/0b46b299-d4fe-4821-9a8d-c4ef2f612206</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1587402092301-725e37c70fd8?w=600</image:loc>
+      <image:title>Unicornio Arcoíris</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600</image:loc>
+      <image:title>Unicornio Arcoíris</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/product/12a573e5-3527-4dc7-ac45-81dc8e27bf2a</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1574158622682-e40e69881006?w=600</image:loc>
+      <image:title>Gatito Gris Dormilón</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600</image:loc>
+      <image:title>Gatito Gris Dormilón</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/product/f7d5f400-e033-4aae-9e02-e0885d9f251f</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1551419762-4a3d998f6292?w=600</image:loc>
+      <image:title>Dinosaurio Verde T-Rex</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600</image:loc>
+      <image:title>Dinosaurio Verde T-Rex</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/product/b5a5303c-f669-4af7-9435-78ee2c54e2d6</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600</image:loc>
+      <image:title>Perrito Golden Retriever</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=600</image:loc>
+      <image:title>Perrito Golden Retriever</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/product/dfb0b621-0580-461c-8088-d4b24eaba698</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600</image:loc>
+      <image:title>Pulpo Reversible Emociones</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=600</image:loc>
+      <image:title>Pulpo Reversible Emociones</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/product/c530e6c6-bc71-4f6c-af1c-04c4a9ff9c4b</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=600</image:loc>
+      <image:title>Elefante Bebé Azul</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600</image:loc>
+      <image:title>Elefante Bebé Azul</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/product/e5393c5d-c263-491c-86b3-b5993a33125a</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=600</image:loc>
+      <image:title>Llama Alpaca Multicolor</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600</image:loc>
+      <image:title>Llama Alpaca Multicolor</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ositoslua.cl/product/3d4693ec-e016-497b-b1d9-33db36ab1220</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1578898886191-22b1605b4e18?w=600</image:loc>
+      <image:title>Dragón Chino Rojo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1567696911980-2eed69a46042?w=600</image:loc>
+      <image:title>Dragón Chino Rojo</image:title>
+    </image:image>
+  </url>
+</urlset>

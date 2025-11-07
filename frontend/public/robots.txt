@@ -1,0 +1,50 @@
+# robots.txt - OsitosLua
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Allow: /
+
+# Páginas públicas importantes
+Allow: /product/
+Allow: /contact
+Allow: /faq
+Allow: /about
+Allow: /terms
+Allow: /privacy
+Allow: /returns
+Allow: /wishlist
+
+# Bloquear páginas privadas/admin
+Disallow: /login
+Disallow: /register
+Disallow: /orders
+Disallow: /cart
+Disallow: /checkout/
+Disallow: /admin/
+
+# Bloquear archivos del sistema
+Disallow: /*.json$
+Disallow: /*.ts$
+Disallow: /*.tsx$
+Disallow: /src/
+Disallow: /node_modules/
+
+# Sitemap
+Sitemap: https://ositoslua.cl/sitemap.xml
+
+# Crawl-delay para bots pesados
+User-agent: Baiduspider
+Crawl-delay: 5
+
+User-agent: Yandex
+Crawl-delay: 2
+
+# Bloquear scrapers conocidos
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: DotBot
+Disallow: /
